@@ -10,7 +10,7 @@ export default function Home() {
         <div className="hero-content">
           <LogoMark />
           <h1>Book <span>&amp;</span> Table</h1>
-          <p className="hero-kicker">A space for stories, food, travel and friendship.</p>
+          <p className="hero-kicker">A space for stories, food, travel and connection.</p>
         </div>
       </header>
       <SiteNav />
