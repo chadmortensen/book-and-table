@@ -1,0 +1,36 @@
+name: Renew Instagram access token
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Check weekly; renew when the stored token is at least 30 days old.
+    - cron: '41 14 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: instagram-token-renewal
+  cancel-in-progress: false
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test token renewal
+        run: node --test tests/instagram-renewal.test.mjs
+
+      - name: Renew and securely save Instagram token
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.INSTAGRAM_SECRET_WRITER }}
+        run: node scripts/renew-instagram-token.mjs
