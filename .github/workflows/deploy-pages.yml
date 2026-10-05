@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '23 15 * * *'
 
 permissions:
   contents: read
@@ -33,6 +35,23 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify Instagram integration
+        run: npm run test:instagram
+
+      - name: Refresh Instagram snapshot
+        # Only public post metadata and preview images enter the build.
+        # A failed refresh stops deployment, preserving the published site.
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: npm run refresh:instagram
+
+      - name: Verify Substack integration
+        run: npm run test:substack
+
+      - name: Refresh Substack snapshot
+        # Failure stops deployment and preserves the published site.
+        run: npm run refresh:substack
 
       - name: Build website
         run: npm run build

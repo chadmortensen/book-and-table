@@ -1,3 +1,6 @@
+import InstagramFeed from '../components/InstagramFeed.jsx'
+import SubstackFeed from '../components/SubstackFeed.jsx'
+
 ## Come find your place around the table
 
 There are plenty of ways to find your place at Book & Table, wherever you are and however much time you have to linger.
@@ -22,24 +25,14 @@ There are plenty of ways to find your place at Book & Table, wherever you are an
 
 ## The latest updates
 
-<div className="integration-placeholder integration-placeholder--events">
-  <span>Event calendar</span>
-  <h3>Our next five gatherings will appear here</h3>
-  <p>This section is ready to connect to The Third Place once the event feed and public event-list URL are available.</p>
-  <a href="#third-place">View all events →</a>
-</div>
-
 <div className="social-previews">
   <div className="integration-placeholder">
-    <span>Instagram</span>
-    <h3>From around our table</h3>
-    <p>A preview of the latest three Instagram posts will appear here.</p>
-    <a href="#instagram">Follow along →</a>
+    <span>Event calendar</span>
+    <h3>Our next five gatherings will appear here</h3>
+    <p>This section is ready to connect to The Third Place once the event feed and public event-list URL are available.</p>
+    <a href="#third-place">View all events →</a>
   </div>
-  <div className="integration-placeholder">
-    <span>Substack</span>
-    <h3>Our latest note</h3>
-    <p>The newest Book & Table article will appear here.</p>
-    <a href="#substack">Read on Substack →</a>
-  </div>
+  <SubstackFeed />
 </div>
+
+<InstagramFeed />

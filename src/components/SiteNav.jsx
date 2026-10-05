@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import substack from '../content/substack.json'
 
 const internalLinks = [
   ['Home', '/'],
   ['About Us', '/about'],
-  ['Events', '/events'],
 ]
 
 export default function SiteNav() {
   const [isOpen, setIsOpen] = useState(false)
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
     setIsOpen(false)
-  }, [pathname])
+  }, [pathname, hash])
 
   useEffect(() => {
     function closeOnEscape(event) {
@@ -41,10 +41,11 @@ export default function SiteNav() {
         </button>
         <div className="nav-links" id="primary-menu">
           {internalLinks.map(([label, to]) => (
-            <NavLink key={to} to={to} end={to === '/'} onClick={() => setIsOpen(false)}>{label}</NavLink>
+            <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => isActive && !(to === '/' && hash === '#events') ? 'active' : ''} onClick={() => setIsOpen(false)}>{label}</NavLink>
           ))}
-          <a href="#substack" title="Add your Substack URL in SiteNav.jsx" onClick={() => setIsOpen(false)}>Substack</a>
-          <a href="#instagram" title="Add your Instagram URL in SiteNav.jsx" onClick={() => setIsOpen(false)}>Instagram</a>
+          <Link to="/#events" className={pathname === '/' && hash === '#events' ? 'active' : ''} onClick={() => setIsOpen(false)}>Events</Link>
+          <a href={substack.url} onClick={() => setIsOpen(false)}>Substack</a>
+          <a href="https://www.instagram.com/book.and.table/" onClick={() => setIsOpen(false)}>Instagram</a>
           <NavLink className="nav-cta" to="/join" onClick={() => setIsOpen(false)}>Join Us</NavLink>
         </div>
       </div>

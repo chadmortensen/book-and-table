@@ -4,17 +4,21 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "refresh:substack": "node scripts/refresh-substack.mjs",
+    "test:substack": "node --test tests/substack.test.mjs",
+    "refresh:instagram": "node scripts/refresh-instagram.mjs",
+    "test:instagram": "node --test tests/instagram.test.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
     "@mdx-js/rollup": "latest",
-    "vite": "latest",
+    "@vitejs/plugin-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest"
-  },
-  "devDependencies": {}
+    "react-router-dom": "latest",
+    "rss-parser": "^3.13.0",
+    "vite": "latest"
+  }
 }

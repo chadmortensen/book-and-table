@@ -23,7 +23,7 @@ The production build is written to `dist/`. The `/edit` route redirects to the h
 ## Before launch
 
 - Replace the temporary hero photograph with a licensed Book & Table photograph.
-- Add the real Substack and Instagram URLs in `src/components/SiteNav.jsx`.
+- Substack is connected to The Garden Dish; see `docs/substack-feed.md` for refresh commands and configuration.
 - Connect the Join page to the chosen newsletter provider.
 - Add real event dates and About page details in `/edit`.
 
