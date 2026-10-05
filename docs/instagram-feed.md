@@ -8,7 +8,17 @@ The Pages workflow fetches the latest three posts, verifies that the token belon
 
 Store the long-lived dashboard token only in the repository Actions secret `INSTAGRAM_ACCESS_TOKEN`. Never use a `VITE_` variable, paste it into source, or enable shell tracing or debug HTTP output. GitHub Pages deployment uses GitHub's existing Actions permissions and OIDC; no personal deployment token is needed.
 
-Meta dashboard tokens last 60 days. Generate a replacement and update the Actions secret before expiry (aim for day 50), or immediately if Meta revokes account authorization. Generate replacements in Meta's **API setup with Instagram login**. This implementation does not automatically rotate the secret: doing so would require another credential authorized to write repository Actions secrets. Daily post refreshes do not extend token expiry.
+Meta dashboard tokens last 60 days. The **Renew Instagram access token** workflow checks weekly and renews once the stored secret is at least 30 days old, leaving at least 23 days before expiry for normal scheduled retries. It validates that both tokens belong to the same `book.and.table` account before saving the returned token. It does not deploy the website. Daily post refreshes alone do not extend token expiry.
+
+To enable renewal:
+
+1. In GitHub **Settings > Developer settings > Personal access tokens > Fine-grained tokens**, create a token named **Book & Table Instagram renewal**. Select resource owner `chadmortensen`, **Only select repositories**, and `book-and-table`. Set **Repository permissions > Secrets** to **Read and write**; leave other permissions unchanged (Metadata read is automatic). Choose an expiration date and record it: this GitHub credential will itself need replacing before that date. A GitHub App is an alternative for longer-term unattended operation.
+2. In the repository **Settings > Secrets and variables > Actions**, add **New repository secret** named `INSTAGRAM_SECRET_WRITER` and paste the GitHub token there. Never paste it in chat or source. This permission covers repository Actions secrets; GitHub does not scope it to a single secret.
+3. Put `.github/workflows/renew-instagram-token.yml`, `scripts/renew-instagram-token.mjs`, and `tests/instagram-renewal.test.mjs` on the default branch. The workflow uses the existing `INSTAGRAM_ACCESS_TOKEN` and the new writer credential.
+4. Once the Instagram secret has been saved for at least 24 hours, open **Actions > Renew Instagram access token > Run workflow**. Confirm success and the updated timestamp for `INSTAGRAM_ACCESS_TOKEN`; do not inspect its value. Manual runs skip tokens saved less than 24 hours ago. Subsequent scheduled checks wait 30 days after each successful save.
+5. Enable failed-workflow notifications in your GitHub notification settings. If renewal fails, resolve the authorization or credential issue and rerun the workflow. GitHub can disable scheduled workflows in inactive public repositories after 60 days; check that the schedule remains enabled.
+
+If the Instagram token expires or Meta revokes authorization, generate a replacement in Meta's **API setup with Instagram login**, update `INSTAGRAM_ACCESS_TOKEN`, and wait 24 hours before testing renewal. Expired tokens cannot be refreshed. The script never logs token responses or renewal URLs, masks the returned token, and passes it to GitHub CLI through stdin for encrypted storage.
 
 The feed needs `instagram_business_basic` and an authorized professional Instagram account. Messaging, publishing, webhook configuration and Facebook Page linking are not required for this read-only snapshot.
 
@@ -20,4 +30,4 @@ An API, token or preview-download error fails the workflow before deployment, le
 
 Run `npm run test:instagram` and `npm run build` locally. To fetch live content, use the Actions workflow so the token stays in GitHub. The temporary `codex/instagram-feed-check` branch runs a verification workflow that produces only public post metadata and image artifacts, without deploying the site.
 
-Sources: [Meta's Instagram Login setup guide](https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login/get-started), [GitHub scheduled workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+Sources: [Meta's token renewal guide](https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login/business-login/), [GitHub secret permissions](https://docs.github.com/en/rest/actions/secrets#create-or-update-a-repository-secret), [Meta's Instagram Login setup guide](https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login/get-started), [GitHub scheduled workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
