@@ -46,9 +46,41 @@ export async function refreshSubstack({ output = fileURLToPath(new URL('../src/c
   return snapshot.posts.length
 }
 
+export async function refreshSubstackWithFallback(options = {}) {
+  try {
+    return { count: await refreshSubstack(options), cached: false }
+  } catch {
+    const output = options.output || fileURLToPath(new URL('../src/content/substack-feed.json', import.meta.url))
+    const snapshot = JSON.parse(await readFile(output, 'utf8'))
+    if (Object.entries(publication).some(([key, value]) => snapshot[key] !== value) ||
+        !Number.isFinite(Date.parse(snapshot.updatedAt)) || !Array.isArray(snapshot.posts) ||
+        !snapshot.posts.length || snapshot.posts.length > 3) {
+      throw new Error('No valid saved Substack snapshot is available.')
+    }
+    for (const post of snapshot.posts) {
+      const url = new URL(post.url)
+      if (url.origin !== new URL(publication.url).origin || !url.pathname.startsWith('/p/') ||
+          url.username || url.password || !Number.isFinite(Date.parse(post.publishedAt)) ||
+          typeof post.title !== 'string' || !post.title.trim() || typeof post.excerpt !== 'string') {
+        throw new Error('The saved Substack snapshot contains invalid articles.')
+      }
+    }
+    return { count: snapshot.posts.length, cached: true }
+  }
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try {
-    console.log(`Substack snapshot refreshed: ${await refreshSubstack()} articles.`)
+    if (process.argv.includes('--allow-cached')) {
+      const result = await refreshSubstackWithFallback()
+      if (result.cached) {
+        console.warn('::warning::Substack live refresh failed. Using validated saved articles; their dates and content have not been updated. The next deployment will retry the feed.')
+      } else {
+        console.log(`Substack snapshot refreshed: ${result.count} articles.`)
+      }
+    } else {
+      console.log(`Substack snapshot refreshed: ${await refreshSubstack()} articles.`)
+    }
   } catch (error) {
     console.error(error.message)
     process.exitCode = 1
