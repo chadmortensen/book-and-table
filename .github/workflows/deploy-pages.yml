@@ -50,8 +50,9 @@ jobs:
         run: npm run test:substack
 
       - name: Refresh Substack snapshot
-        # Failure stops deployment and preserves the published site.
-        run: npm run refresh:substack
+        # Substack can reject hosted runners. Keep validated saved articles
+        # and warn instead of blocking unrelated website updates.
+        run: npm run refresh:substack -- --allow-cached
 
       - name: Build website
         run: npm run build
