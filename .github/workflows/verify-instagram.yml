@@ -1,0 +1,29 @@
+name: Verify Instagram feed
+
+on:
+  push:
+    branches: ['codex/instagram-feed-check']
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test the Instagram snapshot generator
+        run: node --test tests/instagram.test.mjs
+      - name: Fetch the real Book and Table feed
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/refresh-instagram.mjs
+      - name: Save the public feed for visual verification
+        uses: actions/upload-artifact@v4
+        with:
+          name: instagram-public-snapshot
+          path: public/instagram/
+          retention-days: 7
