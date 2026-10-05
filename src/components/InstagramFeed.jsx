@@ -10,12 +10,13 @@ export default function InstagramFeed() {
   const [posts, setPosts] = useState([])
   const [imageRatios, setImageRatios] = useState({})
   const trackId = useId()
+  const ratioFor = post => imageRatios[post.id] || 0.75
 
   useEffect(() => {
     const controller = new AbortController()
     fetch(`${import.meta.env.BASE_URL}instagram/feed.json`, { signal: controller.signal })
       .then(response => response.ok ? response.json() : Promise.reject())
-      .then(feed => setPosts(Array.isArray(feed.posts) ? feed.posts.slice(0, 3) : []))
+      .then(feed => setPosts(Array.isArray(feed.posts) ? feed.posts : []))
       .catch(() => {})
     return () => controller.abort()
   }, [])
@@ -111,7 +112,8 @@ export default function InstagramFeed() {
         <div
           ref={trackRef}
           id={trackId}
-          className={`instagram-track${isDragging ? ' is-dragging' : ''}`}
+          className={`instagram-track is-carousel${isDragging ? ' is-dragging' : ''}`}
+          style={{ '--instagram-last-image-ratio': posts.length ? ratioFor(posts[posts.length - 1]) : .75 }}
           role="region"
           aria-roledescription="carousel"
           aria-label="Latest Instagram posts"
@@ -155,7 +157,7 @@ export default function InstagramFeed() {
         >
           {posts.map((post, index) => {
             const label = post.caption?.slice(0, 90) || 'A moment from around our table'
-            return <article className="instagram-slide" key={post.id} style={{ '--instagram-image-ratio': imageRatios[post.id] || 0.75 }} aria-roledescription="slide" aria-label={`${index + 1} of ${posts.length}: ${label}`}>
+            return <article className="instagram-slide" key={post.id} style={{ '--instagram-image-ratio': ratioFor(post) }} aria-roledescription="slide" aria-label={`${index + 1} of ${posts.length}: ${label}`}>
               <a className="instagram-slide-image" href={post.permalink} target="_blank" rel="noopener noreferrer" aria-label={`View ${label} on Instagram`} draggable={false}>
                 {post.image ? <img src={`${import.meta.env.BASE_URL}${post.image}`} alt={post.caption?.slice(0, 160) || 'A moment from Book & Table'} loading="lazy" width="480" height="480" draggable={false} onLoad={event => {
                   const { naturalWidth, naturalHeight } = event.currentTarget
@@ -164,7 +166,7 @@ export default function InstagramFeed() {
               </a>
               <div className="instagram-slide-copy">
                 <time dateTime={post.timestamp}>{new Date(post.timestamp).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time>
-                <p>{post.caption || 'A moment from around our table.'}</p>
+                {post.caption && <p>{post.caption}</p>}
                 <a className="instagram-slide-link" href={post.permalink} target="_blank" rel="noopener noreferrer" draggable={false}>Read on Instagram <span aria-hidden="true">↗</span></a>
               </div>
             </article>
