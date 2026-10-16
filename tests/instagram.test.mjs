@@ -18,7 +18,7 @@ function api({ username = 'book.and.table', posts = items, failImage = false } =
       assert.equal(options.headers.Authorization, `Bearer ${token}`)
       assert.equal(url.searchParams.has('access_token'), false)
       if (url.pathname.endsWith('/me')) return Response.json({ username })
-      assert.equal(url.searchParams.get('limit'), '3')
+      assert.equal(url.searchParams.get('limit'), '20')
       return Response.json({ data: posts })
     }
     assert.equal(options.headers, undefined, 'credentials must never go to image hosts')
@@ -27,7 +27,7 @@ function api({ username = 'book.and.table', posts = items, failImage = false } =
   }
 }
 
-test('refresh publishes latest three posts and local previews without credentials or CDN URLs', async () => {
+test('refresh publishes the latest posts and local previews without credentials or CDN URLs', async () => {
   const output = await mkdtemp(join(tmpdir(), 'instagram-test-'))
   try {
     assert.equal(await refreshInstagram({ token, output, fetcher: api() }), 3)
@@ -52,6 +52,7 @@ test('rejects wrong accounts, unexpected URLs, and missing credentials', async (
     await assert.rejects(refreshInstagram({ token, output, fetcher: api({ posts: [{ ...items[0], permalink: 'https://example.com/p/one/' }] }) }))
     await assert.rejects(refreshInstagram({ token, output, fetcher: api({ posts: [{ ...items[0], media_url: 'https://example.com/private.jpg' }] }) }))
     await assert.rejects(refreshInstagram({ output, fetcher: api() }))
+    await assert.rejects(refreshInstagram({ token, output, fetcher: api({ posts: Array.from({ length: 21 }, (_, i) => ({ ...items[0], id: String(i + 1) })) }) }))
   } finally { await rm(output, { recursive: true, force: true }) }
 })
 

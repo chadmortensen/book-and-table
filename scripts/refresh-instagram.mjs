@@ -3,6 +3,7 @@ import { resolve, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const API = 'https://graph.instagram.com/v26.0'
+const POST_LIMIT = 20
 const imageTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']])
 
 export async function refreshInstagram({ token, output = resolve('public/instagram'), fetcher = fetch }) {
@@ -11,7 +12,7 @@ export async function refreshInstagram({ token, output = resolve('public/instagr
   async function graph(path, fields) {
     const url = new URL(`${API}/${path}`)
     url.searchParams.set('fields', fields)
-    if (path.endsWith('/media')) url.searchParams.set('limit', '3')
+    if (path.endsWith('/media')) url.searchParams.set('limit', String(POST_LIMIT))
     const response = await fetcher(url, {
       headers: { Authorization: `Bearer ${token}` },
       redirect: 'error', signal: AbortSignal.timeout(30000),
@@ -26,7 +27,7 @@ export async function refreshInstagram({ token, output = resolve('public/instagr
   const account = await graph('me', 'user_id,username')
   if (account.username !== 'book.and.table') throw new Error('The token must belong to book.and.table.')
   const media = await graph('me/media', 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp')
-  if (!Array.isArray(media.data) || media.data.length > 3) throw new Error('Instagram returned an unexpected feed.')
+  if (!Array.isArray(media.data) || media.data.length > POST_LIMIT) throw new Error('Instagram returned an unexpected feed.')
 
   await mkdir(output, { recursive: true })
   const staging = await mkdtemp(join(output, '.refresh-'))
