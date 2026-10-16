@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const pages = ['home', 'about', 'events', 'join']
 
@@ -7,6 +8,7 @@ export default function Editor() {
   const [page, setPage] = useState('home')
   const [content, setContent] = useState('')
   const [status, setStatus] = useState('Loading…')
+  useDocumentTitle('Content editor')
 
   useEffect(() => {
     let active = true

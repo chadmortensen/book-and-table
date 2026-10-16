@@ -1,7 +1,10 @@
 import Footer from '../components/Footer'
 import SiteNav from '../components/SiteNav'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 export default function ContentPage({ title, children }) {
+  useDocumentTitle(title)
+
   return (
     <div>
       <header className="page-header">

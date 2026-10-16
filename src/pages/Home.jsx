@@ -5,9 +5,11 @@ import EventsContent from '../content/events.mdx'
 import Footer from '../components/Footer'
 import LogoMark from '../components/LogoMark'
 import SiteNav from '../components/SiteNav'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 export default function Home() {
   const { hash, key } = useLocation()
+  useDocumentTitle()
 
   useEffect(() => {
     if (hash !== '#events') return
