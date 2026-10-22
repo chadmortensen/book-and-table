@@ -1,4 +1,5 @@
 import Footer from '../components/Footer'
+import SiteHeader from '../components/SiteHeader'
 import SiteNav from '../components/SiteNav'
 import useDocumentTitle from '../hooks/useDocumentTitle'
 
@@ -7,9 +8,7 @@ export default function ContentPage({ title, children }) {
 
   return (
     <div>
-      <header className="page-header">
-        <h1>{title}</h1>
-      </header>
+      <SiteHeader />
       <SiteNav />
       <main className="inner-main">
         <article className="prose inner-prose">{children}</article>

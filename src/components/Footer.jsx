@@ -5,8 +5,7 @@ import { eventsUrl } from '../content/links'
 export default function Footer() {
   return (
     <footer className="site-footer">
-      <LogoMark compact />
-      <p>A space for stories, food, travel and connection.</p>
+      <Link to="/" className="footer-logo" aria-label="Book & Table home"><LogoMark compact /></Link>
       <div className="footer-links">
         <Link to="/about">About</Link>
         <a href={eventsUrl}>Events</a>

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import substack from '../content/substack.json'
-import { eventsUrl } from '../content/links'
+import { eventsUrl, instagramUrl } from '../content/links'
 
 const internalLinks = [
   ['Home', '/'],
@@ -45,8 +44,7 @@ export default function SiteNav() {
             <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setIsOpen(false)}>{label}</NavLink>
           ))}
           <a href={eventsUrl} onClick={() => setIsOpen(false)}>Events</a>
-          <a href={substack.url} onClick={() => setIsOpen(false)}>Substack</a>
-          <a href="https://www.instagram.com/book.and.table/" onClick={() => setIsOpen(false)}>Instagram</a>
+          <a href={instagramUrl} onClick={() => setIsOpen(false)}>Instagram</a>
           <NavLink className="nav-cta" to="/join" onClick={() => setIsOpen(false)}>Join Us</NavLink>
         </div>
       </div>

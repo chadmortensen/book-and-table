@@ -1,10 +1,21 @@
+import { eventsUrl, instagramUrl } from './links.js'
+import { InstagramIcon, MailIcon } from '../components/Icons.jsx'
+
 ## There’s a seat for you
 
-We’re building Book & Table one thoughtful gathering at a time. Join our list to hear about upcoming reading nights, supper clubs and retreats before anyone else.
+We’re building Book & Table one thoughtful gathering at a time. Here’s how to stay close and hear about upcoming reading nights, supper clubs and retreats.
 
-<div className="signup-placeholder">
-  <p><strong>Email signup coming soon</strong></p>
-  <p>This space is ready to connect to your newsletter provider.</p>
+<div className="event-types join-options">
+  <div className="event-type">
+    <span>Stay in the loop</span>
+    <h3>Follow us on Instagram</h3>
+    <p>See what we’re reading, cooking and planning next, and be the first to spot new gatherings.</p>
+    <p><a className="icon-link" href={instagramUrl}><InstagramIcon />Follow @book.and.table</a></p>
+  </div>
+  <div className="event-type">
+    <span>Join the newsletter</span>
+    <h3>Visit our events page</h3>
+    <p>Interested in our newsletter? Sign up on our upcoming events page, where you can also RSVP to what’s next.</p>
+    <p><a className="icon-link" href={eventsUrl}><MailIcon />Sign up for our newsletter</a></p>
+  </div>
 </div>
-
-In the meantime, follow along on Instagram or find our longer notes on Substack.

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import HomeContent from '../content/home.mdx'
 import EventsContent from '../content/events.mdx'
 import Footer from '../components/Footer'
-import LogoMark from '../components/LogoMark'
+import SiteHeader from '../components/SiteHeader'
 import SiteNav from '../components/SiteNav'
 import useDocumentTitle from '../hooks/useDocumentTitle'
 
@@ -21,12 +21,7 @@ export default function Home() {
 
   return (
     <div>
-      <header className="hero">
-        <div className="hero-content">
-          <h1><LogoMark /></h1>
-          <p className="hero-kicker">A space for stories, food, travel and connection.</p>
-        </div>
-      </header>
+      <SiteHeader />
       <SiteNav />
       <main className="home-main">
         <section className="welcome-section">
