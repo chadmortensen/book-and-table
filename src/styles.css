@@ -78,15 +78,15 @@ a { color: inherit; }
 
 .feature-strip { display: grid; grid-template-columns: repeat(3, 1fr); }
 .feature-card { padding: clamp(2rem, 5vw, 1rem); display: flex; flex-direction: column; justify-content: flex-end; }
-.feature-card h2 { font-family: 'Figtree', sans-serif; font-size: clamp(3.2rem, 5.5vw, 5rem); font-weight: 600; letter-spacing: -.01em; line-height: 1; margin: 1rem 0 .5rem; }
-.feature-card p { max-width: 18rem; font-size: .9rem; line-height: 1.7; }
+.feature-card h2 { font-family: 'Figtree', sans-serif; font-size: clamp(3.2rem, 3.5vw, 4rem); font-weight: 600; letter-spacing: -.01em; line-height: 1; margin: 1rem 0 .5rem; }
+.feature-card p { max-width: 18rem; font-size: 1rem; line-height: 1.5; }
 .feature-card--rust { background: var(--rust); color: var(--marine); }
 .feature-card--grass { background: var(--grass); color: var(--marine); }
 .feature-card--salmon { background: var(--salmon); color: var(--marine); }
 
 .inner-main { min-height: 50vh; background: var(--light-cream); }
 .inner-prose { max-width: 780px; margin: auto; padding: 7rem 2rem 9rem; }
-.inner-prose h2, .events-prose h2 { font-family: 'Figtree', sans-serif; font-size: 3rem; font-weight: 600; letter-spacing: -.01em; line-height: 1; margin: 0 0 3rem; }
+.inner-prose h2, .events-prose h2 { font-family: 'Figtree', sans-serif; font-size: 2.5rem; font-weight: 600; letter-spacing: -.01em; line-height: 1; margin: 0 0 3rem; }
 .inner-prose h3 { margin-top: 3rem; color: var(--marine); text-transform: uppercase; letter-spacing: .1em; font-size: .9rem; }
 .inner-prose blockquote { margin: 4rem 0; padding: 0 0 0 2rem; border-left: 3px solid var(--grass); font-family: 'Homemade Apple', cursive; color: var(--marine); font-size: 1.45rem; line-height: 1.8; }
 .signup-placeholder { margin: 3rem 0; padding: 2.5rem; border: 1px dashed var(--salmon); background: var(--light-cream); text-align: center; }
