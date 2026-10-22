@@ -85,7 +85,7 @@ a { color: inherit; }
 .feature-card--salmon { background: var(--salmon); color: var(--marine); }
 
 .inner-main { min-height: 50vh; background: var(--light-cream); }
-.inner-prose { max-width: 780px; margin: auto; padding: 7rem 2rem 9rem; }
+.inner-prose { max-width: 940px; margin: auto; padding: 8rem 2rem 4rem; }
 .inner-prose h2, .events-prose h2 { font-family: 'Figtree', sans-serif; font-size: 2.5rem; font-weight: 600; letter-spacing: -.01em; line-height: 1; margin: 0 0 3rem; }
 .inner-prose h3 { margin-top: 3rem; color: var(--marine); text-transform: uppercase; letter-spacing: .1em; font-size: .9rem; }
 .inner-prose blockquote { margin: 4rem 0; padding: 0 0 0 2rem; border-left: 3px solid var(--grass); font-family: 'Homemade Apple', cursive; color: var(--marine); font-size: 1.45rem; line-height: 1.8; }
